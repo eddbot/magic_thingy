@@ -17,17 +17,21 @@ func (c CardList) getName(name string) []string {
 func (c CardList) getFuzzy(seq string) []string {
 
 	var results []string
+	names := map[string]bool{}
 
 	for k, v := range c {
 		if strings.Contains(k, seq) {
 			for _, word := range v {
-				results = append(results, word)
-
-				if len(results) > 10 {
-					return results
-				}
+				names[word] = true
 			}
 		}
+
+		if len(names) > 10 {
+			break
+		}
+	}
+	for k := range names {
+		results = append(results, k)
 	}
 	return results
 }

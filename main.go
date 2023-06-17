@@ -25,4 +25,15 @@ func main() {
 
 	fmt.Println(x)
 
+	for {
+		fmt.Println("enter a card name")
+		var input string
+		_, err := fmt.Scanln(&input)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		fmt.Println(trie.getFuzzy(input))
+	}
+
 }
