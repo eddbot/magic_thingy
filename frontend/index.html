@@ -1,62 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Card Finder</title>
-</head>
-<body>
+    <link rel="stylesheet" href="site.css" />
+  </head>
+  <body>
+    <h1>Hello World</h1>
 
-<h1>Hello World</h1>
+    <form id="card-form" method="post" action="/api/card">
+      <input
+        placeholder="Enter a card name"
+        id="card-name"
+        type="text"
+        name="name"
+        list="card-selector"
+      />
 
-<form id="card-form" method="post" action="/api/card">
-    <label for="card-name"> Card Name
-        <input id="card-name" type="text" name="name" />
-    </label>
-    <button type="submit">submit</button>
+      <button type="submit">submit</button>
+    </form>
 
-</form>
+    <datalist name="cards" id="card-selector"></datalist>
 
-<script>
-    const card = document.getElementById("card-name")
-    const form = document.getElementById("card-form");
-    form.addEventListener('submit', (e)=> {
-        e.preventDefault()
+    <script>
+      const card = document.getElementById("card-name");
+      const form = document.getElementById("card-form");
 
-        getCardNames(card.value)
-    })
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
 
-    let timer;
-    card.addEventListener('keyup', (e) => {
-        clearTimeout(timer)
+        getCardNames(card.value);
+      });
 
-        timer = setTimeout(()=> {
-            getCardNames(e.target.value)
-        }, 500)
+      let timer;
+      card.addEventListener("keyup", (e) => {
+        clearTimeout(timer);
 
-    });
+        timer = setTimeout(() => {
+          getCardNames(e.target.value);
+        }, 500);
+      });
 
-    const getCardNames = async (name) => {
+      const getCardNames = async (name) => {
         if (name === "") {
-            return;
+          return;
         }
 
         const options = {
-            method: "POST",
-        }
+          method: "POST",
+        };
 
         const params = new URLSearchParams();
-        params.append('name', name)
+        params.append("name", name);
 
-        const url = '/api/card?' + params.toString();
+        const url = "/api/card?" + params.toString();
 
         const names = await fetch(url)
-            .then(res => res.json())
-            .then(data => console.log(data))
-            .catch(err => console.log(err))
-    }
+          .then((res) => res.json())
+          .then((data) => {
+            if (data === null) {
+              return;
+            }
 
+            data.forEach((name) => {
+              const preview = document.getElementById("card-selector");
+              preview.children = null;
+              const node = document.createElement("option");
+              node.value = name;
+              node.innerText = name;
+              preview.appendChild(node);
+            });
 
-</script>
-
-</body>
+            console.log(data);
+          })
+          .catch((err) => console.log(err));
+      };
+    </script>
+  </body>
 </html>

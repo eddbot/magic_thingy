@@ -26,7 +26,7 @@ func (c CardList) getFuzzy(seq string) []string {
 			}
 		}
 
-		if len(names) > 10 {
+		if len(names) >= 10 {
 			break
 		}
 	}
