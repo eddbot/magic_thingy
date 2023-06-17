@@ -25,10 +25,14 @@
         getCardNames(card.value)
     })
 
+    let timer;
     card.addEventListener('keyup', (e) => {
-        setTimeout(()=>{
+        clearTimeout(timer)
+
+        timer = setTimeout(()=> {
             getCardNames(e.target.value)
-        }, 1000)
+        }, 500)
+
     });
 
     const getCardNames = async (name) => {
